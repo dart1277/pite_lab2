@@ -17,7 +17,8 @@ class OXConsoleView:
             if i % 3 == 0:
                 ch = '\n-----\n'
             board.insert(i, ch)
-
+        board.insert(0, '\n')
+        board.append('\n')
         return ''.join(board)
 
     def make_move(self, model, result):
