@@ -10,7 +10,15 @@ class OXConsoleView:
 
     def get_board(self, model, result):
         '''render a nice board here'''
-        return result
+        display_chars = ['O', 'X', ' ']
+        board = list(map(lambda f: display_chars[f], result))
+        for i in reversed(range(1, len(board))):
+            ch = '|'
+            if i % 3 == 0:
+                ch = '\n-----\n'
+            board.insert(i, ch)
+
+        return ''.join(board)
 
     def make_move(self, model, result):
         return result

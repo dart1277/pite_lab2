@@ -41,9 +41,10 @@ class OXGame:
                 move = input('Player ' + self.get_current_player() + ' enter next move\n')
                 move_ok = self.make_move(move)
             result = self.check_game_result()
+        print('Game Over!')
+        print(self.get_board())
         print(result)
         self.end_game()
-        print('Game Over!')
         print('Thank you.')
 
 

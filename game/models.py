@@ -13,6 +13,9 @@ class OXModel:
         if len(self.__players) > player_id and type(player_id) == int and name:
             self.__players[player_id] = str(name)
 
+    def get_players_count(self):
+        return len(self.__players)
+
     def get_current_player(self):
         return self.__players[self.__current_player]
 
