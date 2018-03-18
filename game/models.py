@@ -48,9 +48,6 @@ class OXModel:
         class FoundException(Exception):
             pass
 
-        def board(i, j):
-            return self.__board[i * dim + j]
-
         def row(i):
             return self.__board[i * dim: i * dim + dim]
 
