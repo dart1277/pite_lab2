@@ -10,7 +10,8 @@ class OXModel:
         self.__board = [-1 for it in range(0, self.__board_len)]
 
     def add_player(self, name, player_id):
-        if len(self.__players) > player_id and type(player_id) == int and name:
+        player_id = self.__str_to_int(player_id)
+        if player_id is not None and len(self.__players) > player_id >= 0 and name:
             self.__players[player_id] = str(name)
 
     def get_players_count(self):
