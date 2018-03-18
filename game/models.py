@@ -7,7 +7,7 @@ class OXModel:
         self.__players = ['Player 1', 'Player2']
         self.__current_player = 0
         self.__board_len = 9
-        self.__board = [-1 for i in range(0, self.__board_len)]
+        self.__board = [-1 for it in range(0, self.__board_len)]
 
     def add_player(self, name, player_id):
         if len(self.__players) > player_id and type(player_id) == int and name:
@@ -45,10 +45,36 @@ class OXModel:
         dim = int(math.sqrt(self.__board_len))
         result = None
 
+        class FoundException(Exception):
+            pass
+
         def board(i, j):
             return self.__board[i * dim + j]
 
-        # mock answer
-        if all(map(lambda x: x != -1, self.__board)):
-            result = 'Done'
+        def row(i):
+            return self.__board[i * dim: i * dim + dim]
+
+        def col(i):
+            return [self.__board[j * dim + i] for j in range(0, dim)]
+
+        def diag():
+            return [self.__board[j * dim + j] for j in range(0, dim)]
+
+        def diag2():
+            return [self.__board[j * dim + dim - j - 1] for j in range(0, dim)]
+
+        def check_slice(sli):  # validation: min == max != -1 (for row,column,diagonal), then winner == min
+            if max(sli) == min(sli) != -1:
+                raise FoundException(self.__players[min(sli)])
+
+        try:
+            for i in range(0, dim):
+                check_slice(row(i))
+                check_slice(col(i))
+            check_slice(diag())
+            check_slice(diag2())
+            if all(map(lambda x: x != -1, self.__board)):
+                result = 'A draw'
+        except FoundException as e:
+            result = str(e) + ' won the game!'
         return result
