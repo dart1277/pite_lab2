@@ -42,11 +42,11 @@ class Controller:
             if action == 'end_game':
                 del self.__games[game_id]
                 return
-            result = self.__actions[action]['model'](self.__games[game_id], *params)
+            result = self.get_model_for_id(action, game_id, params)
             if result and self.__actions[action]['view']:
-                return self.__actions[action]['view'](self.__default_view, self.__games[game_id], result)
+                return self.execute_view_function(action, game_id, result)
             elif not result and self.__actions[action]['error_view']:
-                return self.__actions[action]['error_view'](self.__default_view, self.__games[game_id], result)
+                return self.execute_error_function(action, game_id, result)
         elif action == 'get_new_game_instance':
             self.__game_guid = self.__game_guid + 1
             if self.__game_guid in self.__games:
@@ -55,3 +55,12 @@ class Controller:
             return self.__game_guid
         else:
             pass  # Display action Error
+
+    def get_model_for_id(self, action, game_id, params):
+        return self.__actions[action]['model'](self.__games[game_id], *params)
+
+    def execute_view_function(self, action, game_id, result):
+        return self.__actions[action]['view'](self.__default_view, self.__games[game_id], result)
+
+    def execute_error_function(self, action, game_id, result):
+        return self.__actions[action]['error_view'](self.__default_view, self.__games[game_id], result)
