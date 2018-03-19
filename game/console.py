@@ -29,24 +29,35 @@ class OXGame:
         self.controller.get('end_game', self.id)
 
     def play(self):
-        player1 = input('Please enter yor name (Player 1)\n')
-        player2 = input('Please enter yor name (Player 2)\n')
-        self.add_player(player1, 0)
-        self.add_player(player2, 1)
+        self._init_players()
+
         result = None
         while not result:
-            print(self.get_board())
-            move_ok = False
-            while not move_ok:
-                move = input('Player ' + self.get_current_player() + ' enter next move\n')
-                move_ok = self.make_move(move)
-            result = self.check_game_result()
+            result = self._perform_next_move()
+
+        self._finish_game(result)
+
+    def _init_players(self):
+        player1 = input('Please enter yor name (Player 1)\n')
+        self.add_player(player1, 0)
+
+        player2 = input('Please enter yor name (Player 2)\n')
+        self.add_player(player2, 1)
+
+    def _perform_next_move(self):
+        print(self.get_board())
+        move_ok = False
+        while not move_ok:
+            move = input('Player ' + self.get_current_player() + ' enter next move\n')
+            move_ok = self.make_move(move)
+        return self.check_game_result()
+
+    def _finish_game(self, result):
         print('Game Over!')
         print(self.get_board())
         print(result)
         self.end_game()
         print('Thank you.')
-
 
 if __name__ == '__main__':
     game = OXGame()
