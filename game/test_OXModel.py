@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from game import models
+from game.models import OXModel
 
 
 class TestOXModel(TestCase):
@@ -11,7 +11,7 @@ class TestOXModel(TestCase):
 
     def setUp(self):
         super().setUp()
-        self.testModel = models.OXModel(0)
+        self.testModel = OXModel(0)
 
     def test_add_player(self):
         test_id = 0
