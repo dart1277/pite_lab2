@@ -78,6 +78,13 @@ class TestOXModel(TestCase):
         self.assertNotEqual(board, result_board)
         self.assertNotEqual(self.player1, result_player)
 
+    def test_make_move_invalid_argument(self):
+        invalid_argument = 'invalid'
+
+        expected = self.testModel.make_move(invalid_argument)
+
+        self.assertIsNone(expected)
+
     def test_check_game_result_ingame(self):
         result = self.testModel.check_game_result()
 
