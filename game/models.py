@@ -13,6 +13,7 @@ class OXModel:
         player_id = self.__str_to_int(player_id)
         if self._can_add_player(name, player_id):
             self.__players[player_id] = str(name)
+            return True
 
     def _can_add_player(self, name, player_id):
         return player_id is not None and len(self.__players) > player_id >= 0 and name
