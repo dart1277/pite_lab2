@@ -36,6 +36,7 @@ class Controller:
                           }
         self.__games = {}
         self.__game_guid = 0
+        self.__games_cnt_limit = 10
 
     def get(self, action, game_id, *params):
         if action in self.__actions and game_id in self.__games:
@@ -49,12 +50,12 @@ class Controller:
                 return self._execute_error_function(action, game_id, result)
         elif action == 'get_new_game_instance':
             self.__game_guid = self.__game_guid + 1
-            if self.__game_guid in self.__games:
+            if self.__game_guid in self.__games or self.games_active()>= self.__games_cnt_limit:
                 raise OverflowError('Too many games')
-            self.__games[self.__game_guid] = self.__actions[action]['model'](game_id)
+            self.__games[str(self.__game_guid)] = self.__actions[action]['model'](game_id)
             return self.__game_guid
         else:
-            pass  # Display action Error
+            pass  # Display action Error -> return None
 
     def _get_model_for_id(self, action, game_id, params):
         return self.__actions[action]['model'](self.__games[game_id], *params)
@@ -64,3 +65,6 @@ class Controller:
 
     def _execute_error_function(self, action, game_id, result):
         return self.__actions[action]['error_view'](self.__default_view, self.__games[game_id], result)
+
+    def games_active(self):
+        return len(self.__games)

@@ -96,7 +96,7 @@ class OXModel:
                 result = 'A draw'
         except FoundException as e:
             result = str(e) + ' won the game!'
-        return result
+        return result if result is not None else 'False'
 
 
 
