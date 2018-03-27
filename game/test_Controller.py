@@ -78,6 +78,14 @@ class TestOxController(unittest.TestCase):
         model_mock.assert_called_with(0)
 
     @patch('game.controller.OXModel')
+    def test_controller_get_new_game_instance_too_many_games(self, model_mock):
+        con = Controller()
+        con._Controller__games = {0: '', 1: ''}
+        model_mock.return_value = model_mock
+        model_mock.get_new_game_instance.return_value = True
+        self.assertRaises(OverflowError, con.get('get_new_game_instance', 0))
+
+    @patch('game.controller.OXModel')
     @patch('game.controller.OXConsoleView')
     def test_controller_check_game_result(self, console_view_mock, model_mock):
         con = Controller()
@@ -99,6 +107,71 @@ class TestOxController(unittest.TestCase):
         out = con.get('end_game', g_id, 'name1', 0)
 
         self.assertEqual(out, None)
+
+    @patch('game.controller.OXModel')
+    @patch('game.controller.OXConsoleView')
+    def test_controller_add_player_error(self, console_view_mock, model_mock):
+        con = Controller()
+        model_mock.return_value = model_mock
+        model_mock.add_player.return_value = False           # Model's method must return sthg other than None, 0, False
+
+        g_id = con.get('get_new_game_instance', 0)
+        con.get('add_player', g_id, 'name1', 0)
+
+        model_mock.add_player.assert_called_with(model_mock, 'name1', 0)
+        console_view_mock.error.assert_called_with(console_view_mock, model_mock, False)
+
+    @patch('game.controller.OXModel')
+    @patch('game.controller.OXConsoleView')
+    def test_controller_get_current_player_error(self, console_view_mock, model_mock):
+        con = Controller()
+        model_mock.return_value = model_mock
+        model_mock.get_current_player.return_value = False
+
+        g_id = con.get('get_new_game_instance', 0)
+        con.get('get_current_player', g_id, 'name1', 0)
+
+        model_mock.get_current_player.assert_called_with(model_mock, 'name1', 0)
+        console_view_mock.error.assert_called_with(console_view_mock, model_mock, False)
+
+    @patch('game.controller.OXModel')
+    @patch('game.controller.OXConsoleView')
+    def test_controller_get_board_error(self, console_view_mock, model_mock):
+        con = Controller()
+        model_mock.return_value = model_mock
+        model_mock.get_board.return_value = False
+
+        g_id = con.get('get_new_game_instance', 0)
+        con.get('get_board', g_id, 'name1', 0)
+
+        model_mock.get_board.assert_called_with(model_mock, 'name1', 0)
+        console_view_mock.error.assert_called_with(console_view_mock, model_mock, False)
+
+    @patch('game.controller.OXModel')
+    @patch('game.controller.OXConsoleView')
+    def test_controller_make_move_error(self, console_view_mock, model_mock):
+        con = Controller()
+        model_mock.return_value = model_mock
+        model_mock.make_move.return_value = False
+
+        g_id = con.get('get_new_game_instance', 0)
+        con.get('make_move', g_id, 'name1', 0)
+
+        model_mock.make_move.assert_called_with(model_mock, 'name1', 0)
+        console_view_mock.error.assert_called_with(console_view_mock, model_mock, False)
+
+    @patch('game.controller.OXModel')
+    @patch('game.controller.OXConsoleView')
+    def test_controller_check_game_result_error(self, console_view_mock, model_mock):
+        con = Controller()
+        model_mock.return_value = model_mock
+        model_mock.check_game_result.return_value = False
+
+        g_id = con.get('get_new_game_instance', 0)
+        con.get('check_game_result', g_id, 'name1', 0)
+
+        model_mock.check_game_result.assert_called_with(model_mock, 'name1', 0)
+        console_view_mock.error.assert_called_with(console_view_mock, model_mock, False)
 
 
 if __name__ == '__main__':
