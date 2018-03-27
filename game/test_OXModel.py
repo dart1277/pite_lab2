@@ -88,7 +88,7 @@ class TestOXModel(TestCase):
     def test_check_game_result_ingame(self):
         result = self.testModel.check_game_result()
 
-        self.assertIsNone(result)
+        self.assertEqual('False', result)
 
     def test_check_game_result_win(self):
         expected_result = self.player1 + ' won the game!'
