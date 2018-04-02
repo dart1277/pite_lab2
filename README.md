@@ -1,7 +1,7 @@
 # PitE_lab2
 
 ## TicTacToe - Client/Server Edition
-Simple implementation of game using sockets.
+Simple implementation of game using sockets. Game uses 3x3 grid to play and fields are numeratoed 0-8. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row wins the game.
 
 ## Usage
 1. Run OXServer.py
