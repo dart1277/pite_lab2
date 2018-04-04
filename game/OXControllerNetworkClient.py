@@ -24,7 +24,7 @@ class OXControllerNetworkClient:
                 if data_dict.get("Headers").get("Status") == 404:
                     return_val = None
                 else:
-                    return_val = data_dict.get("Payload").get("Return")
+                    return_val = data_dict.get("Payload").get("Result")
                 request_not_completed = False
             except:
                 print('Error: Cannot connect to the server!')

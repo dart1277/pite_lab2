@@ -25,7 +25,10 @@ class OXServer:
         return s
 
     def generate_response(self, status_code, body_return_value):
-        return_dict = {"Headers": {"Status": status_code}, "Payload": {"Return": body_return_value}}
+        if (status_code == 200):
+            return_dict = {"Headers": {"Status": status_code}, "Payload": {"Result": body_return_value}}
+        else:
+            return_dict = {"Headers": {"Status": status_code}, "Payload": {"Error Message": "Not found"}}
         return json.dumps(return_dict)
 
     def _parse_query(self, data):
