@@ -1,6 +1,8 @@
-from game.controller import Controller
-from urllib import parse
 import socket
+from urllib import parse
+import json
+
+from game.controller import Controller
 
 
 class OXServer:
@@ -21,6 +23,13 @@ class OXServer:
             print('Could not open socket')
             exit(1)
         return s
+
+    def generate_response(self, status_code, body_return_value):
+        if (status_code == 200):
+            return_dict = {"Headers": {"Status": status_code}, "Payload": {"Result": body_return_value}}
+        else:
+            return_dict = {"Headers": {"Status": status_code}, "Payload": {"Error Message": "Not found"}}
+        return json.dumps(return_dict)
 
     def _parse_query(self, data):
         """
@@ -59,10 +68,11 @@ class OXServer:
                 # on failure return empty response to the client
                 # it would be much better to use HTTP instead of sock library
                 # and return standard status codes like 200 or 404 to the client
-                if ret is None or ret is False:
-                    continue
+                if ret is None:
+                    json_ret = self.generate_response(404, "")
                 else:
-                    conn.sendall(str(ret).encode())
+                    json_ret = self.generate_response(200, ret)
+                conn.sendall(str(json_ret).encode())
             except Exception as e:
                 # log exception and client address
                 print(e)

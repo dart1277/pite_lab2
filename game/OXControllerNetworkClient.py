@@ -1,5 +1,7 @@
+import json
 import socket
 from urllib import parse
+
 from game.OXServer import OXServer
 
 
@@ -10,18 +12,19 @@ class OXControllerNetworkClient:
 
     def get(self, **params):
         query_str = parse.urlencode(params)
-        data = s = None
         request_not_completed = True
+        return_val = s = None
         while request_not_completed:
             try:
                 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 s.connect((self.TCP_IP, self.TCP_PORT))
                 s.send(query_str.encode())
-                data = s.recv(self.BUFFER_SIZE)
-                if len(data) == 0:
-                    data = None
+                data = s.recv(self.BUFFER_SIZE).decode(encoding='UTF-8')
+                data_dict = json.loads(data)
+                if data_dict.get("Headers").get("Status") == 404:
+                    return_val = None
                 else:
-                    data = data.decode(encoding='UTF-8')
+                    return_val = data_dict.get("Payload").get("Result")
                 request_not_completed = False
             except:
                 print('Error: Cannot connect to the server!')
@@ -31,4 +34,4 @@ class OXControllerNetworkClient:
                 print('Please wait...')
             finally:
                 s.close()
-        return data
+        return return_val

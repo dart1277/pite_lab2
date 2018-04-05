@@ -50,6 +50,7 @@ class OXModel:
             self.__board[field] = self.__current_player
             self._switch_player()
             return True
+        return False
 
     def _can_make_a_move(self, field):
         return field is not None and self.__is_move_valid(field)
@@ -68,7 +69,7 @@ class OXModel:
             return self.__board[i * dim: i * dim + dim]
 
         def col():
-            return [self.__board[j * dim + j] for j in range(0, dim)]
+            return [self.__board[j * dim + i] for j in range(0, dim)]
 
         def diag():
             return [self.__board[j * dim + j] for j in range(0, dim)]
