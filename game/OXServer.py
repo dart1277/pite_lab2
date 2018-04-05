@@ -68,7 +68,7 @@ class OXServer:
                 # on failure return empty response to the client
                 # it would be much better to use HTTP instead of sock library
                 # and return standard status codes like 200 or 404 to the client
-                if ret is None or ret is False:
+                if ret is None:
                     json_ret = self.generate_response(404, "")
                 else:
                     json_ret = self.generate_response(200, ret)
